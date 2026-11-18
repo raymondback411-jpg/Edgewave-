@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EDGEWAVE — Trading Journal</title>
+<style>
+:root{--bg:#f4f5f8;--panel:#fff;--panel2:#f0f1f5;--text:#171923;--muted:#747887;--line:#e2e4eb;--accent:#7257e8;--green:#15966b;--red:#d45c68;--shadow:0 8px 28px #2221}
+[data-theme=dark]{--bg:#101116;--panel:#191b23;--panel2:#222530;--text:#f1f2f6;--muted:#9a9eac;--line:#30333f;--accent:#9b86ff;--green:#45c99a;--red:#ff7884;--shadow:0 8px 28px #0004}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,Arial}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:9px 12px}button.primary{background:var(--accent);border-color:var(--accent);color:white}button.active{background:var(--panel2);border-color:var(--accent);color:var(--accent)}.app{display:grid;grid-template-columns:226px 1fr;min-height:100vh}.side{background:var(--panel);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:8px}.brand{font-size:20px;font-weight:850;letter-spacing:1.7px;padding:7px 10px 25px}.brand span{color:var(--accent)}.nav{display:flex;gap:12px;align-items:center;text-align:left;width:100%;border:0;background:transparent;color:var(--muted);padding:11px 12px}.nav.active{background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);font-weight:700}.nav .ico{width:19px;text-align:center}.sidebottom{margin-top:auto;color:var(--muted);font-size:12px;padding:12px}.main{min-width:0}.top{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:var(--panel)}.top small{color:var(--muted)}.content{padding:26px;max-width:1500px;margin:auto}.pagehead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.pagehead h1{margin:0;font-size:24px}.muted{color:var(--muted)}.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:var(--shadow)}.statlabel{color:var(--muted);font-size:12px}.statval{font-size:25px;font-weight:750;margin-top:7px}.two{grid-template-columns:1.45fr 1fr}.three{grid-template-columns:repeat(3,1fr)}h2{font-size:16px;margin:0 0 14px}h3{font-size:13px;margin:18px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.chart{height:210px;width:100%;display:block}.pill{font-size:11px;padding:4px 8px;border-radius:20px;background:var(--panel2);color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.field{display:grid;gap:6px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--text)}textarea{min-height:78px;resize:vertical}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}.table th{color:var(--muted);font-weight:600}.scroll{overflow:auto}.hidden{display:none!important}.split{display:grid;grid-template-columns:245px minmax(0,1fr) 220px;gap:14px}.planlist button{width:100%;text-align:left;margin:4px 0}.check{display:flex;gap:9px;align-items:center;margin:9px 0;color:var(--muted)}.check input{width:auto}.thumb{width:100%;height:120px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day{min-height:80px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px;font-size:12px}.day .pnl{display:block;margin-top:14px;font-weight:700}.upload{border:1px dashed var(--muted);padding:16px;border-radius:10px;text-align:center;color:var(--muted)}.chat{height:330px;overflow:auto;display:flex;flex-direction:column;gap:12px;padding:12px;background:var(--bg);border:1px solid var(--line);border-radius:10px}.bubble{max-width:85%;padding:11px 13px;border-radius:12px;background:var(--panel2)}.bubble.me{align-self:flex-end;background:color-mix(in srgb,var(--accent) 18%,var(--panel));}.tag{display:inline-block;padding:4px 8px;border-radius:6px;background:var(--panel2);margin:3px;color:var(--muted);font-size:11px}.empty{padding:25px;text-align:center;color:var(--muted)}.footnote{font-size:11px;color:var(--muted);margin-top:15px}
+@media(max-width:1050px){.split{grid-template-columns:210px 1fr}.split .right{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.app{grid-template-columns:1fr}.side{position:sticky;top:0;z-index:3;flex-direction:row;overflow:auto;padding:8px;border-right:0;border-bottom:1px solid var(--line)}.brand{display:none}.nav{white-space:nowrap;width:auto;padding:9px}.sidebottom{display:none}.top{padding:0 14px}.content{padding:16px}.two,.three{grid-template-columns:1fr}.split{grid-template-columns:1fr}.split .right{grid-column:auto;grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.day{min-height:65px;padding:5px;font-size:10px}}
+</style>
+</head>
+<body data-theme="light">
+<section id="authScreen" style="display:none;position:fixed;inset:0;z-index:10;background:var(--bg);align-items:center;justify-content:center;padding:20px">
+<div class="card" style="width:min(420px,100%);padding:28px">
+<div class="brand" style="padding:0 0 8px">EDGE<span>WAVE</span></div>
+<h1 id="authTitle">Welcome back</h1><p class="muted">Trading journal workspace</p>
+<div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="you@example.com"></div>
+<div class="field"><label>Password</label><input id="authPassword" type="password" placeholder="Enter password"></div>
+<button class="primary" id="authContinue" style="width:100%">Continue in demo</button>
+<p class="footnote">Demo sign-in only. This does not create a secure account or connect to cloud storage.</p>
+<button id="authToggle" style="width:100%;margin-top:8px">Create demo profile</button>
+</div></section>
+<div class="app"><aside class="side">
+  <div class="brand">EDGE<span>WAVE</span></div>
+  <button class="nav active" data-page="dashboard"><span class="ico">▦</span> Dashboard</button>
+  <button class="nav" data-page="journal"><span class="ico">▤</span> Journal</button>
+  <button class="nav" data-page="calendar"><span class="ico">▦</span> Calendar</button>
+  <button class="nav" data-page="strategies"><span class="ico">◈</span> Strategies</button>
+  <button class="nav" data-page="plan"><span class="ico">☷</span> Trade Plan</button>
+  <button class="nav" data-page="news"><span class="ico">◉</span> News</button>
+  <button class="nav" data-page="risk"><span class="ico">⌁</span> Risk Management</button>
+  <button class="nav" data-page="notebook"><span class="ico">▧</span> Notebook</button>
+  <button class="nav" data-page="sanctuary"><span class="ico">✧</span> Sanctuary</button>
+  <button class="nav" data-page="ai"><span class="ico">✳</span> Edge AI</button>
+  <button class="nav" data-page="settings"><span class="ico">⚙</span> Settings</button>
+  <div class="sidebottom">EDGEWAVE · Personal workspace<br>Plan. Execute. Improve.</div>
+</aside>
+
+<div class="main">
+  <header class="top">
+    <div><strong id="topTitle">Dashboard</strong><br><small>Your trading performance at a glance</small></div>
+    <div class="row">
+      <button id="themeBtn" title="Switch theme">☾</button>
+      <button id="exportBtn">Export</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <section class="page" id="page-dashboard">
+      <div class="pagehead">
+        <div><h1>Good to see you.</h1><span class="muted">Here's your trading overview.</span></div>
+        <button class="primary" data-go="journal">+ Add trade</button>
+      </div>
+
+      <div class="grid stats">
+        <div class="card"><div class="statlabel">Net P&L</div><div class="statval" id="statPnl">$0.00</div><span class="muted">All recorded trades</span></div>
+        <div class="card"><div class="statlabel">Win rate</div><div class="statval" id="statWin">0%</div><span class="muted">Winning trades</span></div>
+        <div class="card"><div class="statlabel">Total trades</div><div class="statval" id="statTrades">0</div><span class="muted">Journal entries</span></div>
+        <div class="card"><div class="statlabel">Average R:R</div><div class="statval" id="statRR">0.00R</div><span class="muted">Recorded outcomes</span></div>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <div class="row"><h2>Equity curve</h2><span class="pill">Cumulative P&L</span></div>
+          <svg class="chart" id="equityChart" viewBox="0 0 600 210" preserveAspectRatio="none">
+            <path d="M0 175 H600 M0 125 H600 M0 75 H600 M0 25 H600" stroke="var(--line)" fill="none" stroke-dasharray="4 5"/>
+            <path d="M0 175 L600 175" stroke="var(--accent)" stroke-width="3" fill="none"/>
+            <text x="300" y="110" fill="var(--muted)" text-anchor="middle" font-size="14">Your equity curve will appear here</text>
+          </svg>
+        </div>
+        <div class="card">
+          <h2>Performance breakdown</h2>
+          <div class="row"><span class="muted">Wins</span><strong id="dashWins">0</strong></div>
+          <div class="row" style="margin-top:15px"><span class="muted">Losses</span><strong id="dashLosses">0</strong></div>
+          <div class="row" style="margin-top:15px"><span class="muted">Breakeven</span><strong id="dashBE">0</strong></div>
+          <div class="row" style="margin-top:15px"><span class="muted">Best trade</span><strong id="dashBest">$0.00</strong></div>
+          <div class="row" style="margin-top:15px"><span class="muted">Worst trade</span><strong id="dashWorst">$0.00</strong></div>
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top:15px">
+        <div class="card">
+          <div class="row"><h2>Recent trades</h2><button data-go="journal">View journal →</button></div>
+          <div class="scroll"><table class="table"><thead><tr><th>Symbol</th><th>Direction</th><th>Net P&L</th><th>R:R</th></tr></thead><tbody id="recentTrades"><tr><td colspan="4" class="empty">No trades recorded yet.</td></tr></tbody></table></div>
+        </div>
+        <div class="card">
+          <h2>Trading focus</h2>
+          <p class="muted">Your process matters more than any single result.</p>
+          <div class="tag">Wait for confirmation</div>
+          <div class="tag">Respect your stop loss</div>
+          <div class="tag">Review every trade</div>
+          <div class="tag">Stay consistent</div>
+        </div>
+      </div>
+    </section><section class="page hidden" id="page-journal">
+<div class="pagehead"><div><h1>Trade Journal</h1><span class="muted">Record and review your execution.</span></div><button class="primary" id="newTrade">+ Add trade</button></div>
+<div class="card">
+<div class="grid three">
+<div class="field"><label>Symbol</label><input id="tSymbol" placeholder="EURUSD / US500"></div>
+<div class="field"><label>Direction</label><select id="tDirection"><option>Long</option><option>Short</option></select></div>
+<div class="field"><label>Date</label><input id="tDate" type="date"></div>
+<div class="field"><label>Entry</label><input id="tEntry" type="number" step="any"></div>
+<div class="field"><label>Exit</label><input id="tExit" type="number" step="any"></div>
+<div class="field"><label>Time</label><input id="tTime" type="time"></div>
+<div class="field"><label>Stop loss</label><input id="tSL" type="number" step="any"></div>
+<div class="field"><label>Take profit</label><input id="tTP" type="number" step="any"></div>
+<div class="field"><label>Position size</label><input id="tSize" type="number" step="any"></div>
+<div class="field"><label>Net P&L ($)</label><input id="tPnl" type="number" step="any"></div>
+<div class="field"><label>Risk : Reward (e.g. 2 for 1:2)</label><input id="tRR" type="number" step="0.1" placeholder="2"></div>
+<div class="field"><label>Trading day</label><select id="tDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+</div>
+<div class="field"><label>Lessons / trade review</label><textarea id="tLesson" placeholder="What did you learn from this trade?"></textarea></div>
+<div class="row"><span class="muted" id="tradeFormMessage">Fill in your trade details.</span><button class="primary" id="saveTrade">Save trade</button></div>
+</div>
+<div class="card" style="margin-top:15px">
+<div class="row"><h2>Trade history</h2><input id="tradeSearch" placeholder="Search symbol..." style="max-width:180px"></div>
+<div class="scroll"><table class="table"><thead><tr><th>Date</th><th>Symbol</th><th>Direction</th><th>Entry</th><th>Exit</th><th>Net P&L</th><th>R:R</th><th>Action</th></tr></thead><tbody id="tradeRows"><tr><td colspan="8" class="empty">No trades yet.</td></tr></tbody></table></div>
+</div>
+</section>
+
+<section class="page hidden" id="page-calendar">
+<div class="pagehead"><div><h1>Trading Calendar</h1><span class="muted">Review your daily performance.</span></div><div class="row"><button id="prevMonth">←</button><strong id="monthName"></strong><button id="nextMonth">→</button></div></div>
+<div class="card"><div class="calendar" id="calendarGrid"></div></div>
+</section>
+
+<section class="page hidden" id="page-strategies">
+<div class="pagehead"><div><h1>Strategies</h1><span class="muted">Keep your trading rules organised.</span></div><button class="primary" id="addStrategy">+ New strategy</button></div>
+<div class="card">
+<h2>Market Architect Pullback Strategy</h2>
+<p class="muted">Your main strategy workspace.</p>
+<div class="tag">Higher-timeframe bias</div><div class="tag">Supply & demand</div><div class="tag">Liquidity sweep</div><div class="tag">15-minute confirmation</div>
+<h3>Strategy rules</h3>
+<div id="strategyRules">
+<label class="check"><input type="checkbox"> Identify higher-timeframe direction</label>
+<label class="check"><input type="checkbox"> Mark swing high and swing low</label>
+<label class="check"><input type="checkbox"> Mark supply and demand zones</label>
+<label class="check"><input type="checkbox"> Wait for price to reach the planned area</label>
+<label class="check"><input type="checkbox"> Wait for liquidity sweep</label>
+<label class="check"><input type="checkbox"> Confirm market shift on 15m</label>
+<label class="check"><input type="checkbox"> Define stop loss and target</label>
+</div>
+<div class="field"><label>Strategy notes</label><textarea id="strategyNotes" placeholder="Add your strategy notes..."></textarea></div>
+<button class="primary" id="saveStrategy">Save strategy notes</button>
+</div>
+<div class="card" style="margin-top:15px"><h2>My other strategies</h2><div id="otherStrategies" class="muted">No additional strategies added.</div></div>
+</section>
+
+<section class="page hidden" id="page-plan">
+<div class="pagehead"><div><h1>Trade Plan Builder</h1><span class="muted">Plan first. Execute with discipline.</span></div><button class="primary" id="savePlan">Save plan</button></div>
+<div class="card">
+<h2>Pre-trade checklist</h2>
+<div id="planChecks">
+<label class="check"><input type="checkbox"> Higher-timeframe bias is clear</label>
+<label class="check"><input type="checkbox"> Price is at a planned supply/demand zone</label>
+<label class="check"><input type="checkbox"> Liquidity has been swept</label>
+<label class="check"><input type="checkbox"> Market shift is confirmed</label>
+<label class="check"><input type="checkbox"> Entry, stop loss and target are planned</label>
+<label class="check"><input type="checkbox"> Risk is within my limit</label>
+<label class="check"><input type="checkbox"> I am emotionally ready to execute</label>
+</div>
+<div class="grid two">
+<div class="field"><label>Market / Symbol</label><input id="planSymbol" placeholder="US500"></div>
+<div class="field"><label>Directional bias</label><select id="planBias"><option> bullish</option><option>Bearish</option><option>Neutral</option></select></div>
+</div>
+<div class="field"><label>Entry idea</label><textarea id="planEntry" placeholder="Describe your planned entry..."></textarea></div>
+<div class="field"><label>Invalidation / What proves the idea wrong?</label><textarea id="planInvalid" placeholder="What would invalidate your setup?"></textarea></div>
+<div class="field"><label>Target and management</label><textarea id="planTarget" placeholder="Planned target and trade management..."></textarea></div>
+<div class="field"><label>Post-trade review</label><textarea id="planReview" placeholder="What happened? What will you improve?"></textarea></div>
+</div>
+</section>
+
+<section class="page hidden" id="page-news">
+<div class="pagehead"><div><h1>Market News</h1><span class="muted">Keep track of important economic events.</span></div></div>
+<div class="card"><h2>News watchlist</h2><p class="muted">Add events you want to monitor. This version does not fetch live news automatically.</p>
+<div class="grid three"><div class="field"><label>Event</label><input id="newsEvent" placeholder="US CPI"></div><div class="field"><label>Date</label><input id="newsDate" type="date"></div><div class="field"><label>Currency / Market</label><input id="newsMarket" placeholder="USD / Indices"></div></div>
+<div class="field"><label>Notes</label><textarea id="newsNotes" placeholder="Expected impact or preparation notes..."></textarea></div><button class="primary" id="addNews">Add event</button><div id="newsList" style="margin-top:15px"></div></div>
+</section>
+
+<section class="page hidden" id="page-risk">
+<div class="pagehead"><div><h1>Risk Management</h1><span class="muted">Understand your planned risk before execution.</span></div></div>
+<div class="card">
+<div class="grid two">
+<div class="field"><label>Account balance ($)</label><input id="riskBalance" type="number" placeholder="1000"></div>
+<div class="field"><label>Risk percentage (%)</label><input id="riskPercent" type="number" value="1" step="0.1"></div>
+</div>
+<button class="primary" id="calcRisk">Calculate risk</button>
+<div class="grid three" style="margin-top:15px">
+<div class="card"><div class="statlabel">Risk amount</div><div class="statval" id="riskAmount">$0</div></div>
+<div class="card"><div class="statlabel">Balance after loss</div><div class="statval" id="riskAfter">$0</div></div>
+<div class="card"><div class="statlabel">Risk percentage</div><div class="statval" id="riskShown">0%</div></div>
+</div>
+<p class="footnote">This is a simple planning calculator, not a position-size or investment recommendation.</p>
+</div>
+</section>
+
+<section class="page hidden" id="page-notebook">
+<div class="pagehead"><div><h1>Notebook</h1><span class="muted">Your trading thoughts and observations.</span></div><button class="primary" id="saveNotebook">Save notes</button></div>
+<div class="card"><textarea id="notebookText" style="min-height:300px" placeholder="Write your trading notes here..."></textarea></div>
+</section>
+
+<section class="page hidden" id="page-sanctuary">
+<div class="pagehead"><div><h1>Sanctuary</h1><span class="muted">Reset your focus and strengthen your discipline.</span></div></div>
+<div class="grid two">
+<div class="card"><h2>My trading principles</h2><p>Execution over profit.</p><p>Discipline over excitement.</p><p>Protect capital. Respect the plan.</p><p>One trade does not define me.</p></div>
+<div class="card"><h2>Emotional check-in</h2><label class="check"><input type="checkbox"> I feel calm</label><label class="check"><input type="checkbox"> I am patient</label><label class="check"><input type="checkbox"> I am following my plan</label><label class="check"><input type="checkbox"> I accept that losses happen</label><label class="check"><input type="checkbox"> I am not chasing a trade</label></div>
+</div>
+<div class="card" style="margin-top:15px"><h2>Reflection</h2><textarea id="sanctuaryText" placeholder="What is on your mind? What do you need to remind yourself?"></textarea><button class="primary" id="saveSanctuary" style="margin-top:10px">Save reflection</button></div>
+</section>
+
+<section class="page hidden" id="page-ai">
+<div class="pagehead"><div><h1>Edge AI</h1><span class="muted">Trading review assistant preview.</span></div></div>
+<div class="card"><p class="muted">This is an offline demo assistant, not a connected AI service. It cannot see live markets or predict prices.</p><div class="chat" id="chat"><div class="bubble">Welcome to Edge AI preview. Ask for a journal review prompt or a discipline reminder.</div></div><div class="row" style="margin-top:10px"><input id="aiInput" placeholder="Ask about your trading process..."><button class="primary" id="aiSend">Send</button></div></div>
+</section>
+
+<section class="page hidden" id="page-settings">
+<div class="pagehead"><div><h1>Settings</h1><span class="muted">Customise your workspace.</span></div></div>
+<div class="card"><h2>Appearance</h2><p class="muted">Choose how EDGEWAVE looks.</p><button id="lightTheme">Light theme</button> <button id="darkTheme">Dark theme</button></div>
+<div class="card" style="margin-top:15px"><h2>Data and privacy</h2><p class="muted">Your records are saved in this browser on this device. Clearing browser data may erase them. Export backups regularly.</p><button id="settingsExport">Export my data</button> <button id="clearData">Clear all local data</button></div>
+</section></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const KEY="edgewave_data_v1";
+let data={trades:[],news:[],strategies:[],notes:"",sanctuary:"",plan:{},theme:"light"};
+let editId=null;
+try{data={...data,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data))}
+function money(n){return (n<0?"-$":"$")+Math.abs(Number(n)||0).toFixed(2)}
+function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showPage(name){
+ document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+ $("page-"+name)?.classList.remove("hidden");
+ document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+ $("topTitle").textContent=name==="ai"?"Edge AI":name==="plan"?"Trade Plan Builder":name.charAt(0).toUpperCase()+name.slice(1);
+ window.scrollTo(0,0);
+}
+document.querySelectorAll(".nav").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.go)));
+function setTheme(t){
+ data.theme=t;document.body.dataset.theme=t;persist();
+ $("themeBtn").textContent=t==="dark"?"☀":"☾";
+}
+setTheme(data.theme||"light");
+$("themeBtn").onclick=()=>setTheme(data.theme==="dark"?"light":"dark");
+$("lightTheme").onclick=()=>setTheme("light");
+$("darkTheme").onclick=()=>setTheme("dark");
+function render(){
+ const ts=data.trades||[];
+ const pnl=ts.reduce((a,t)=>a+Number(t.pnl||0),0);
+ const wins=ts.filter(t=>Number(t.pnl)>0).length;
+ const losses=ts.filter(t=>Number(t.pnl)<0).length;
+ const be=ts.length-wins-losses;
+ const rr=ts.filter(t=>Number(t.rr)>0);
+ const avg=rr.length?rr.reduce((a,t)=>a+Number(t.rr),0)/rr.length:0;
+ $("statPnl").textContent=money(pnl);
+ $("statPnl").className="statval "+(pnl>=0?"positive":"negative");
+ $("statWin").textContent=(ts.length?Math.round(wins/ts.length*100):0)+"%";
+ $("statTrades").textContent=ts.length;
+ $("statRR").textContent=avg.toFixed(2)+"R";
+ $("dashWins").textContent=wins;$("dashLosses").textContent=losses;$("dashBE").textContent=be;
+ $("dashBest").textContent=money(ts.length?Math.max(...ts.map(t=>Number(t.pnl)||0)):0);
+ $("dashWorst").textContent=money(ts.length?Math.min(...ts.map(t=>Number(t.pnl)||0)):0);
+ const sorted=[...ts].sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+ let total=0,points=sorted.map(t=>{total+=Number(t.pnl)||0;return total});
+ drawChart(points);
+ const recent=[...ts].reverse().slice(0,5);
+ $("recentTrades").innerHTML=recent.length?recent.map(t=>`<tr><td>${escapeHTML(t.symbol)}</td><td>${escapeHTML(t.direction)}</td><td class="${t.pnl>=0?"positive":"negative"}">${money(t.pnl)}</td><td>${Number(t.rr||0).toFixed(1)}R</td></tr>`).join(""):'<tr><td colspan="4" class="empty">No trades recorded yet.</td></tr>';
+ renderTrades();renderCalendar();renderNews();
+}
+function drawChart(points){
+ const svg=$("equityChart");
+ if(!points.length){svg.innerHTML='<path d="M0 175 H600" stroke="var(--accent)" stroke-width="3" fill="none"/><text x="300" y="105" fill="var(--muted)" text-anchor="middle" font-size="14">Add trades to see your equity curve</text>';return}
+ const min=Math.min(0,...points),max=Math.max(0,...points),range=max-min||1;
+ const coords=points.map((v,i)=>[points.length===1?300:i*600/(points.length-1),185-(v-min)/range*155]);
+ const line=coords.map((p,i)=>(i?"L":"M")+p[0]+" "+p[1]).join(" ");
+ const area=line+" L600 195 L0 195 Z";
+ svg.innerHTML=`<path d="M0 40H600 M0 90H600 M0 140H600 M0 190H600" stroke="var(--line)" stroke-dasharray="4 5"/><path d="${area}" fill="var(--accent)" opacity=".12"/><path d="${line}" stroke="var(--accent)" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+}
+function renderTrades(){
+ const q=($("tradeSearch").value||"").toLowerCase();
+ const ts=data.trades.filter(t=>String(t.symbol).toLowerCase().includes(q));
+ $("tradeRows").innerHTML=ts.length?ts.map(t=>`<tr><td>${escapeHTML(t.date)}</td><td>${escapeHTML(t.symbol)}</td><td>${escapeHTML(t.direction)}</td><td>${escapeHTML(t.entry)}</td><td>${escapeHTML(t.exit)}</td><td class="${t.pnl>=0?"positive":"negative"}">${money(t.pnl)}</td><td>${Number(t.rr||0).toFixed(1)}R</td><td><button onclick="editTrade('${t.id}')">Edit</button> <button onclick="deleteTrade('${t.id}')">Delete</button></td></tr>`).join(""):'<tr><td colspan="8" class="empty">No matching trades.</td></tr>';
+}
+$("tradeSearch").addEventListener("input",renderTrades);
+$("newTrade").onclick=()=>{editId=null;["tSymbol","tEntry","tExit","tTime","tSL","tTP","tSize","tPnl","tRR","tLesson"].forEach(id=>$(id).value="");$("tDate").value=new Date().toISOString().slice(0,10);$("tradeFormMessage").textContent="New trade";};
+$("saveTrade").onclick=()=>{
+ const symbol=$("tSymbol").value.trim();
+ if(!symbol){alert("Please enter a symbol.");return}
+ const t={id:editId||String(Date.now()),symbol,direction:$("tDirection").value,date:$("tDate").value,time:$("tTime").value,entry:$("tEntry").value,exit:$("tExit").value,sl:$("tSL").value,tp:$("tTP").value,size:$("tSize").value,pnl:Number($("tPnl").value||0),rr:Number($("tRR").value||0),day:$("tDay").value,lesson:$("tLesson").value};
+ if(editId){data.trades=data.trades.map(x=>x.id===editId?t:x)}else{data.trades.push(t)}
+ persist();render();editId=null;$("tradeFormMessage").textContent="Trade saved successfully.";
+};
+window.editTrade=id=>{
+ const t=data.trades.find(x=>x.id===id);if(!t)return;
+ editId=id;
+ const map={tSymbol:"symbol",tDirection:"direction",tDate:"date",tTime:"time",tEntry:"entry",tExit:"exit",tSL:"sl",tTP:"tp",tSize:"size",tPnl:"pnl",tRR:"rr",tDay:"day",tLesson:"lesson"};
+ Object.entries(map).forEach(([a,b])=>$(a).value=t[b]??"");
+ $("tradeFormMessage").textContent="Editing trade";showPage("journal");$("tSymbol").focus();
+};
+window.deleteTrade=id=>{
+ if(!confirm("Delete this trade?"))return;
+ data.trades=data.trades.filter(t=>t.id!==id);persist();render();
+};
+let calDate=new Date();
+function renderCalendar(){
+ const y=calDate.getFullYear(),m=calDate.getMonth();
+ $("monthName").textContent=calDate.toLocaleString("en",{month:"long",year:"numeric"});
+ const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();
+ const names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+ let html=names.map(n=>`<div class="muted">${n}</div>`).join("");
+ for(let i=0;i<first;i++)html+="<div></div>";
+ for(let d=1;d<=days;d++){
+  const date=y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+  const dayTrades=data.trades.filter(t=>t.date===date);
+  const sum=dayTrades.reduce((a,t)=>a+Number(t.pnl||0),0);
+  html+=`<div class="day"><strong>${d}</strong>${dayTrades.length?`<span class="pnl ${sum>=0?"positive":"negative"}">${money(sum)}</span><small>${dayTrades.length} trade(s)</small>`:""}</div>`;
+ }
+ $("calendarGrid").innerHTML=html;
+}
+$("prevMonth").onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCalendar()};
+$("nextMonth").onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
+$("calcRisk").onclick=()=>{
+ const balance=Number($("riskBalance").value),pct=Number($("riskPercent").value);
+ if(balance<=0||pct<0){alert("Enter a valid balance and risk percentage.");return}
+ const risk=balance*pct/100;
+ $("riskAmount").textContent=money(risk);$("riskAfter").textContent=money(balance-risk);$("riskShown").textContent=pct+"%";
+};
+$("saveStrategy").onclick=()=>{data.strategyNotes=$("strategyNotes").value;persist();alert("Strategy notes saved.")};
+$("strategyNotes").value=data.strategyNotes||"";
+$("addStrategy").onclick=()=>{
+ const name=prompt("Enter the strategy name:");if(!name)return;
+ data.strategies.push(name);persist();renderStrategies();
+};
+function renderStrategies(){$("otherStrategies").innerHTML=data.strategies.length?data.strategies.map(s=>`<div class="tag">${escapeHTML(s)}</div>`).join(""):"No additional strategies added."}
+renderStrategies();
+$("savePlan").onclick=()=>{
+ data.plan={symbol:$("planSymbol").value,bias:$("planBias").value,entry:$("planEntry").value,invalid:$("planInvalid").value,target:$("planTarget").value,review:$("planReview").value,checks:[...$("planChecks").querySelectorAll("input")].map(x=>x.checked)};
+ persist();alert("Trade plan saved.");
+};
+if(data.plan){
+ $("planSymbol").value=data.plan.symbol||"";$("planBias").value=data.plan.bias||" bullish";
+ $("planEntry").value=data.plan.entry||"";$("planInvalid").value=data.plan.invalid||"";
+ $("planTarget").value=data.plan.target||"";$("planReview").value=data.plan.review||"";
+ [...$("planChecks").querySelectorAll("input")].forEach((x,i)=>x.checked=!!data.plan.checks?.[i]);
+}
+$("addNews").onclick=()=>{
+ const event=$("newsEvent").value.trim();if(!event){alert("Enter an event name.");return}
+ data.news.push({event,date:$("newsDate").value,market:$("newsMarket").value,notes:$("newsNotes").value});
+ persist();renderNews();["newsEvent","newsDate","newsMarket","newsNotes"].forEach(id=>$(id).value="");
+};
+function renderNews(){
+ $("newsList").innerHTML=data.news.length?data.news.map((n,i)=>`<div class="card" style="margin-top:8px"><div class="row"><strong>${escapeHTML(n.event)}</strong><button onclick="deleteNews(${i})">Delete</button></div><p class="muted">${escapeHTML(n.date)} · ${escapeHTML(n.market)}</p><p>${escapeHTML(n.notes)}</p></div>`).join(""):'<p class="empty">No events added yet.</p>';
+}
+window.deleteNews=i=>{data.news.splice(i,1);persist();renderNews()};
+$("saveNotebook").onclick=()=>{data.notes=$("notebookText").value;persist();alert("Notes saved.")};
+$("notebookText").value=data.notes||"";
+$("saveSanctuary").onclick=()=>{data.sanctuary=$("sanctuaryText").value;persist();alert("Reflection saved.")};
+$("sanctuaryText").value=data.sanctuary||"";
+function exportData(){
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="edgewave-backup.json";a.click();URL.revokeObjectURL(url);
+}
+$("exportBtn").onclick=exportData;$("settingsExport").onclick=exportData;
+$("clearData").onclick=()=>{
+ if(!confirm("This permanently clears all EDGEWAVE data saved in this browser. Export a backup first. Continue?"))return;
+ localStorage.removeItem(KEY);location.reload();
+};
+$("aiSend").onclick=()=>{
+ const q=$("aiInput").value.trim();if(!q)return;
+ const chat=$("chat");chat.innerHTML+=`<div class="bubble me">${escapeHTML(q)}</div>`;
+ let answer="Review your written rules, check whether your setup met them, and record one lesson. I can help you reflect, but this demo does not analyse live markets.";
+ if(/risk|loss|stop/i.test(q))answer="Consider whether your planned risk was defined before entry and whether your stop-loss followed your written plan. Avoid increasing risk to recover a loss.";
+ else if(/journal|review|trade/i.test(q))answer="Review your entry reason, confirmation, risk, exit and lesson. Separate the quality of your execution from the trade's outcome.";
+ else if(/discipline|emotion|patient/i.test(q))answer="Pause and compare your current decision with your written plan. If the setup is unclear or you feel pressured, it's okay not to trade.";
+ chat.innerHTML+=`<div class="bubble">${answer}</div>`;chat.scrollTop=chat.scrollHeight;$("aiInput").value="";
+};
+render();
+</script>
+</body>
+</html>
